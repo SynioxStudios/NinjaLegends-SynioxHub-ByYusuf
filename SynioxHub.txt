@@ -2,21 +2,12 @@ local Fluent = loadstring(game:HttpGet("https://raw.githubusercontent.com/Syniox
 
 local Window = Fluent:CreateWindow({
     Title = "Syniox Hub",
-    SubTitle = "Ninja Legends",
-    TabWidth = 160,
-    Size = UDim2.fromOffset(550, 380),
-    Acrylic = true,
-    Theme = "Dark",
-    MinimizeKey = Enum.KeyCode.LeftControl
+    Size = UDim2.fromOffset(550, 380)
 })
 
-local Tabs = {
-    Main = Window:AddTab({ Title = "Auto Farm" }),
-    Shop = Window:AddTab({ Title = "Auto Buy" }),
-    Misc = Window:AddTab({ Title = "Misc" })
-}
+local FarmTab = Window:AddTab({ Title = "Auto Farm" })
 
-Tabs.Main:AddToggle("AutoSwing", {Title = "Auto Swing"}):OnChanged(function(Value)
+FarmTab:AddToggle("Auto Swing", function(Value)
     _G.swing = Value
     while _G.swing do
         task.wait()
@@ -24,32 +15,27 @@ Tabs.Main:AddToggle("AutoSwing", {Title = "Auto Swing"}):OnChanged(function(Valu
     end
 end)
 
-Tabs.Main:AddToggle("AutoSell", {Title = "Auto Sell"}):OnChanged(function(Value)
+FarmTab:AddToggle("Auto Sell", function(Value)
     _G.sell = Value
     while _G.sell do
         task.wait()
         game.workspace.sellAreaCircles.sellAreaCircle15.circleInner.CFrame = game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame
-        task.wait()
+        task.wait(0.1)
         game.workspace.sellAreaCircles.sellAreaCircle15.circleInner.CFrame = game.Workspace.Part.CFrame
     end
 end)
 
-Tabs.Shop:AddButton({
-    Title = "Buy All Items",
+FarmTab:AddButton({
+    Title = "Unlock All Islands",
     Callback = function()
-        local remote = game:GetService("Players").LocalPlayer.ninjaEvent
-        remote:FireServer("buyAllSwords", "Blazing Vortex Island")
-        remote:FireServer("buyAllBelts", "Blazing Vortex Island")
-        remote:FireServer("buyAllSkills", "Blazing Vortex Island")
+        local islands = {
+            CFrame.new(80, 766, -188),
+            CFrame.new(-128, 39439, 173),
+            CFrame.new(183, 46010, 36)
+        }
+        for _, cf in ipairs(islands) do
+            game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = cf
+            task.wait(0.2)
+        end
     end
 })
-
-Tabs.Misc:AddToggle("Invisibility", {Title = "Invisibility"}):OnChanged(function(Value)
-    _G.invis = Value
-    while _G.invis do
-        task.wait()
-        game.Players.LocalPlayer.ninjaEvent:FireServer("goInvisible")
-    end
-end)
-
-Fluent:Notify({Title = "Syniox Hub", Content = "Loaded", Duration = 5})
