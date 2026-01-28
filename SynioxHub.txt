@@ -1,6 +1,6 @@
-local SynioxLib = loadstring(game:HttpGet("https://raw.githubusercontent.com/SynioxStudios/Fluent/refs/heads/main/Fluent.txt"))()
+local Fluent = loadstring(game:HttpGet("https://raw.githubusercontent.com/SynioxStudios/Fluent/refs/heads/main/Fluent.txt"))()
 
-local Window = SynioxLib:CreateWindow({
+local Window = Fluent:CreateWindow({
     Title = "Syniox Hub",
     SubTitle = "Ninja Legends",
     TabWidth = 160,
@@ -12,7 +12,7 @@ local Window = SynioxLib:CreateWindow({
 
 local Tabs = {
     Main = Window:AddTab({ Title = "Auto Farm", Icon = "swords" }),
-    AutoBuy = Window:AddTab({ Title = "Auto Buy", Icon = "shopping-cart" }),
+    Shop = Window:AddTab({ Title = "Auto Buy", Icon = "shopping-cart" }),
     Misc = Window:AddTab({ Title = "Misc", Icon = "zap" })
 }
 
@@ -34,16 +34,13 @@ Tabs.Main:AddToggle("AutoSell", {Title = "Auto Sell", Default = false}):OnChange
     end
 end)
 
-Tabs.AutoBuy:AddButton({
-    Title = "Buy All Items (Blazing Island)",
-    Description = "Swords, Belts, Skills, Shurikens",
+Tabs.Shop:AddButton({
+    Title = "Buy All Items (Blazing Vortex)",
     Callback = function()
-        local island = "Blazing Vortex Island"
         local remote = game:GetService("Players").LocalPlayer.ninjaEvent
-        remote:FireServer("buyAllSwords", island)
-        remote:FireServer("buyAllBelts", island)
-        remote:FireServer("buyAllSkills", island)
-        remote:FireServer("buyAllShurikens", island)
+        remote:FireServer("buyAllSwords", "Blazing Vortex Island")
+        remote:FireServer("buyAllBelts", "Blazing Vortex Island")
+        remote:FireServer("buyAllSkills", "Blazing Vortex Island")
     end
 })
 
@@ -55,18 +52,4 @@ Tabs.Misc:AddToggle("Invisibility", {Title = "Invisibility", Default = false}):O
     end
 end)
 
-Tabs.Misc:AddButton({
-    Title = "Unlock All Islands",
-    Callback = function()
-        local islands = {
-            CFrame.new(80, 766, -188),
-            CFrame.new(-128, 39439, 173),
-            CFrame.new(183, 46010, 36),
-            CFrame.new(188, 59594, 24)
-        }
-        for _, cf in ipairs(islands) do
-            game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = cf
-            task.wait(0.1)
-        end
-    end
-})
+Fluent:Notify({Title = "Syniox Hub", Content = "Ninja Legends Script Ready!", Duration = 5})
