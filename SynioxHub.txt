@@ -2,27 +2,29 @@ local Fluent = loadstring(game:HttpGet("https://raw.githubusercontent.com/Syniox
 
 local Window = Fluent:CreateWindow({
     Title = "Syniox Hub",
-    Size = UDim2.fromOffset(550, 380)
+    SubTitle = "Ninja Legends"
 })
 
-local MainTab = Window:AddTab({ Title = "Main Farm" })
-local ShopTab = Window:AddTab({ Title = "Auto Buy" })
-local MiscTab = Window:AddTab({ Title = "Misc" })
+local FarmTab = Window:AddTab({ Title = "Auto Farm" })
+local ShopTab = Window:AddTab({ Title = "Shop" })
 
-MainTab:AddToggle("Auto Swing", function(Value)
-    _G.swing = Value
+FarmTab:AddToggle("Auto Swing", function(state)
+    _G.swing = state
     while _G.swing do
         task.wait()
         game:GetService("Players").LocalPlayer.ninjaEvent:FireServer("swingKatana")
     end
 end)
 
-MainTab:AddToggle("Auto Sell", function(Value)
-    _G.sell = Value
+FarmTab:AddToggle("Auto Sell", function(state)
+    _G.sell = state
     while _G.sell do
         task.wait()
-        game.workspace.sellAreaCircles.sellAreaCircle15.circleInner.CFrame = game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame
-        task.wait(0.1)
-        game.workspace.sellAreaCircles.sellAreaCircle15.circleInner.CFrame = game.Workspace.Part.CFrame
+        -- Buraya sell kodunu ekle
     end
+end)
+
+ShopTab:AddButton("Unlock All Islands", function()
+    print("Islands Unlocked!")
+    -- Buraya ada açma kodunu ekle
 end)
