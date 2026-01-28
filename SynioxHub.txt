@@ -1,25 +1,72 @@
--- SYNIOX HUB - DIRECT LOADER
--- Küçük buton vs. her şeyi sildik, direkt senin GUI'ni yüklüyoruz.
 local SynioxLib = loadstring(game:HttpGet("https://raw.githubusercontent.com/SynioxStudios/Fluent/refs/heads/main/Fluent.txt"))()
 
--- 1. ANA PENCERE VE SEKME AYARLARI
--- (Bu kısımlar kütüphanenin çalışması için gereken temel tanımlardır)
 local Window = SynioxLib:CreateWindow({
     Title = "Syniox Hub",
-    SubTitle = "Muscle Legends",
+    SubTitle = "Ninja Legends",
     TabWidth = 160,
-    Size = UDim2.fromOffset(580, 460),
+    Size = UDim2.fromOffset(550, 380),
     Acrylic = true,
     Theme = "Dark",
-    MinimizeKey = Enum.KeyCode.LeftControl -- Menüyü gizlemek/açmak için CTRL
+    MinimizeKey = Enum.KeyCode.LeftControl
 })
 
 local Tabs = {
-    Main = Window:AddTab({ Title = "Main", Icon = "home" }),
-    Settings = Window:AddTab({ Title = "Settings", Icon = "settings" })
+    Main = Window:AddTab({ Title = "Auto Farm", Icon = "swords" }),
+    AutoBuy = Window:AddTab({ Title = "Auto Buy", Icon = "shopping-cart" }),
+    Misc = Window:AddTab({ Title = "Misc", Icon = "zap" })
 }
 
--- 2. ÖRNEK FONKSİYONLAR
--- Görseldeki gibi "Main" sekmesine özellikleri ekliyoruz
-Tabs.Main:AddToggle("AutoLift", {Title = "Auto Lift", Default = false})
-Tabs.Main:AddToggle("FastTools", {Title = "Fast Tools", Default = false})
+Tabs.Main:AddToggle("AutoSwing", {Title = "Auto Swing", Default = false}):OnChanged(function(Value)
+    _G.swing = Value
+    while _G.swing do
+        task.wait()
+        game:GetService("Players").LocalPlayer.ninjaEvent:FireServer("swingKatana")
+    end
+end)
+
+Tabs.Main:AddToggle("AutoSell", {Title = "Auto Sell", Default = false}):OnChanged(function(Value)
+    _G.sell = Value
+    while _G.sell do
+        task.wait()
+        game.workspace.sellAreaCircles.sellAreaCircle15.circleInner.CFrame = game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame
+        task.wait()
+        game.workspace.sellAreaCircles.sellAreaCircle15.circleInner.CFrame = game.Workspace.Part.CFrame
+    end
+end)
+
+Tabs.AutoBuy:AddButton({
+    Title = "Buy All Items (Blazing Island)",
+    Description = "Swords, Belts, Skills, Shurikens",
+    Callback = function()
+        local island = "Blazing Vortex Island"
+        local remote = game:GetService("Players").LocalPlayer.ninjaEvent
+        remote:FireServer("buyAllSwords", island)
+        remote:FireServer("buyAllBelts", island)
+        remote:FireServer("buyAllSkills", island)
+        remote:FireServer("buyAllShurikens", island)
+    end
+})
+
+Tabs.Misc:AddToggle("Invisibility", {Title = "Invisibility", Default = false}):OnChanged(function(Value)
+    _G.invis = Value
+    while _G.invis do
+        task.wait()
+        game.Players.LocalPlayer.ninjaEvent:FireServer("goInvisible")
+    end
+end)
+
+Tabs.Misc:AddButton({
+    Title = "Unlock All Islands",
+    Callback = function()
+        local islands = {
+            CFrame.new(80, 766, -188),
+            CFrame.new(-128, 39439, 173),
+            CFrame.new(183, 46010, 36),
+            CFrame.new(188, 59594, 24)
+        }
+        for _, cf in ipairs(islands) do
+            game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = cf
+            task.wait(0.1)
+        end
+    end
+})
