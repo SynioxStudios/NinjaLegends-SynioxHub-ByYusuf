@@ -5,9 +5,11 @@ local Window = Fluent:CreateWindow({
     Size = UDim2.fromOffset(550, 380)
 })
 
-local FarmTab = Window:AddTab({ Title = "Auto Farm" })
+local MainTab = Window:AddTab({ Title = "Main Farm" })
+local ShopTab = Window:AddTab({ Title = "Auto Buy" })
+local MiscTab = Window:AddTab({ Title = "Misc" })
 
-FarmTab:AddToggle("Auto Swing", function(Value)
+MainTab:AddToggle("Auto Swing", function(Value)
     _G.swing = Value
     while _G.swing do
         task.wait()
@@ -15,7 +17,7 @@ FarmTab:AddToggle("Auto Swing", function(Value)
     end
 end)
 
-FarmTab:AddToggle("Auto Sell", function(Value)
+MainTab:AddToggle("Auto Sell", function(Value)
     _G.sell = Value
     while _G.sell do
         task.wait()
@@ -24,18 +26,3 @@ FarmTab:AddToggle("Auto Sell", function(Value)
         game.workspace.sellAreaCircles.sellAreaCircle15.circleInner.CFrame = game.Workspace.Part.CFrame
     end
 end)
-
-FarmTab:AddButton({
-    Title = "Unlock All Islands",
-    Callback = function()
-        local islands = {
-            CFrame.new(80, 766, -188),
-            CFrame.new(-128, 39439, 173),
-            CFrame.new(183, 46010, 36)
-        }
-        for _, cf in ipairs(islands) do
-            game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = cf
-            task.wait(0.2)
-        end
-    end
-})
