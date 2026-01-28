@@ -11,12 +11,12 @@ local Window = Fluent:CreateWindow({
 })
 
 local Tabs = {
-    Main = Window:AddTab({ Title = "Auto Farm", Icon = "swords" }),
-    Shop = Window:AddTab({ Title = "Auto Buy", Icon = "shopping-cart" }),
-    Misc = Window:AddTab({ Title = "Misc", Icon = "zap" })
+    Main = Window:AddTab({ Title = "Auto Farm" }),
+    Shop = Window:AddTab({ Title = "Auto Buy" }),
+    Misc = Window:AddTab({ Title = "Misc" })
 }
 
-Tabs.Main:AddToggle("AutoSwing", {Title = "Auto Swing", Default = false}):OnChanged(function(Value)
+Tabs.Main:AddToggle("AutoSwing", {Title = "Auto Swing"}):OnChanged(function(Value)
     _G.swing = Value
     while _G.swing do
         task.wait()
@@ -24,7 +24,7 @@ Tabs.Main:AddToggle("AutoSwing", {Title = "Auto Swing", Default = false}):OnChan
     end
 end)
 
-Tabs.Main:AddToggle("AutoSell", {Title = "Auto Sell", Default = false}):OnChanged(function(Value)
+Tabs.Main:AddToggle("AutoSell", {Title = "Auto Sell"}):OnChanged(function(Value)
     _G.sell = Value
     while _G.sell do
         task.wait()
@@ -35,7 +35,7 @@ Tabs.Main:AddToggle("AutoSell", {Title = "Auto Sell", Default = false}):OnChange
 end)
 
 Tabs.Shop:AddButton({
-    Title = "Buy All Items (Blazing Vortex)",
+    Title = "Buy All Items",
     Callback = function()
         local remote = game:GetService("Players").LocalPlayer.ninjaEvent
         remote:FireServer("buyAllSwords", "Blazing Vortex Island")
@@ -44,7 +44,7 @@ Tabs.Shop:AddButton({
     end
 })
 
-Tabs.Misc:AddToggle("Invisibility", {Title = "Invisibility", Default = false}):OnChanged(function(Value)
+Tabs.Misc:AddToggle("Invisibility", {Title = "Invisibility"}):OnChanged(function(Value)
     _G.invis = Value
     while _G.invis do
         task.wait()
@@ -52,4 +52,4 @@ Tabs.Misc:AddToggle("Invisibility", {Title = "Invisibility", Default = false}):O
     end
 end)
 
-Fluent:Notify({Title = "Syniox Hub", Content = "Ninja Legends Script Ready!", Duration = 5})
+Fluent:Notify({Title = "Syniox Hub", Content = "Loaded", Duration = 5})
