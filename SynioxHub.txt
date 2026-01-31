@@ -1,7 +1,7 @@
 local library = loadstring(game:HttpGet("https://raw.githubusercontent.com/SynioxStudios/ByYusufGui-Syniox/refs/heads/main/SynioxGui.txt", true))()
 local displayName = game.Players.LocalPlayer.DisplayName
 
-local window = library:AddWindow("Syniox Public | Muscle Legends || HELLO - ".. displayName, {
+local window = library:AddWindow("Syniox Public | Ninja Legends || HELLO - ".. displayName, {
     title_bar = {
         Color3.fromRGB(160, 0, 0), 
         Color3.fromRGB(40, 0, 0),  
@@ -19,8 +19,8 @@ local window = library:AddWindow("Syniox Public | Muscle Legends || HELLO - ".. 
     can_resize = true 
 })
 
-local FarmTab = Window:AddTab("Farm")
-FarmTab:AddToggle("Auto Swing", function(state)
+local FarmTab = window:AddTab("Farm")
+FarmTab:AddSwitch("Auto Swing", function(state)
     _G.swing = state
     task.spawn(function()
         while _G.swing do
@@ -29,8 +29,7 @@ FarmTab:AddToggle("Auto Swing", function(state)
         end
     end)
 end)
-
-FarmTab:AddToggle("Auto Sell", function(state)
+FarmTab:AddSwitch("Auto Sell", function(state)
     _G.sell = state
     task.spawn(function()
         while _G.sell do
@@ -43,8 +42,7 @@ FarmTab:AddToggle("Auto Sell", function(state)
         end
     end)
 end)
-
-FarmTab:AddToggle("Auto Collect Chi", function(state)
+FarmTab:AddSwitch("Auto Collect Chi", function(state)
     _G.chi = state
     task.spawn(function()
         while _G.chi do
@@ -58,8 +56,8 @@ FarmTab:AddToggle("Auto Collect Chi", function(state)
     end)
 end)
 
-local CombatTab = Window:AddTab("Combat")
-CombatTab:AddToggle("Auto Boss (Robot)", function(state)
+local CombatTab = window:AddTab("Combat")
+CombatTab:AddSwitch("Auto Boss (Robot)", function(state)
     _G.boss = state
     task.spawn(function()
         while _G.boss do
@@ -71,7 +69,7 @@ CombatTab:AddToggle("Auto Boss (Robot)", function(state)
         end
     end)
 end)
-CombatTab:AddToggle("Auto Eternal Boss", function(state)
+CombatTab:AddSwitch("Auto Eternal Boss", function(state)
     _G.eternal = state
     task.spawn(function()
         while _G.eternal do
@@ -84,7 +82,7 @@ CombatTab:AddToggle("Auto Eternal Boss", function(state)
     end)
 end)
 
-local IslandTab = Window:AddTab("Islands")
+local IslandTab = window:AddTab("Islands")
 IslandTab:AddButton("Unlock All Islands", function()
     local islands = {
         CFrame.new(80, 766, -188), CFrame.new(-128, 39439, 173), CFrame.new(183, 46010, 36),
@@ -97,7 +95,7 @@ IslandTab:AddButton("Unlock All Islands", function()
     end
 end)
 
-local MeditateTab = Window:AddTab("Meditate")
+local MeditateTab = window:AddTab("Meditate")
 MeditateTab:AddButton("Mystical Waters", function()
     game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(320, 30383, -12)
 end)
@@ -105,8 +103,8 @@ MeditateTab:AddButton("Midnight Waters", function()
     game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(315, 30383, -20)
 end)
 
-local ShopTab = Window:AddTab("Auto Buy")
-ShopTab:AddToggle("Auto Buy Swords", function(state)
+local ShopTab = window:AddTab("Auto Buy")
+ShopTab:AddSwitch("Auto Buy Swords", function(state)
     _G.swords = state
     task.spawn(function()
         while _G.swords do
@@ -115,7 +113,7 @@ ShopTab:AddToggle("Auto Buy Swords", function(state)
         end
     end)
 end)
-ShopTab:AddToggle("Auto Buy Belts", function(state)
+ShopTab:AddSwitch("Auto Buy Belts", function(state)
     _G.belts = state
     task.spawn(function()
         while _G.belts do
@@ -124,7 +122,7 @@ ShopTab:AddToggle("Auto Buy Belts", function(state)
         end
     end)
 end)
-ShopTab:AddToggle("Auto Buy Skills", function(state)
+ShopTab:AddSwitch("Auto Buy Skills", function(state)
     _G.skills = state
     task.spawn(function()
         while _G.skills do
@@ -134,8 +132,8 @@ ShopTab:AddToggle("Auto Buy Skills", function(state)
     end)
 end)
 
-local MiscTab = Window:AddTab("Misc")
-MiscTab:AddToggle("Auto Rebirth", function(state)
+local MiscTab = window:AddTab("Misc")
+MiscTab:AddSwitch("Auto Rebirth", function(state)
     _G.reb = state
     task.spawn(function()
         while _G.reb do
