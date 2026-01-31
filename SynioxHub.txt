@@ -4,11 +4,27 @@ local Window = Fluent:CreateWindow({
     Title = "Syniox Hub",
     SubTitle = "Ninja Legends",
     TabWidth = 160,
-    Size = UDim2.fromOffset(580, 460),
-    Acrylic = true, 
+    Size = UDim2.fromOffset(450, 300),
+    Acrylic = false, 
     Theme = "Dark",
     MinimizeKey = Enum.KeyCode.RightControl
 })
+
+local ToggleButton = Instance.new("TextButton")
+local ScreenGui = Instance.new("ScreenGui")
+ScreenGui.Parent = game:GetService("CoreGui")
+ToggleButton.Parent = ScreenGui
+ToggleButton.Size = UDim2.new(0, 50, 0, 50)
+ToggleButton.Position = UDim2.new(0.1, 0, 0.1, 0)
+ToggleButton.Text = "Aç"
+ToggleButton.BackgroundColor3 = Color3.fromRGB(41, 74, 122)
+ToggleButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+Instance.new("UICorner", ToggleButton).CornerRadius = UDim.new(0, 8)
+ToggleButton.Draggable = true
+
+ToggleButton.MouseButton1Click:Connect(function()
+    game:GetService("VirtualInputManager"):SendKeyEvent(true, Enum.KeyCode.RightControl, false, game)
+end)
 
 local Tabs = {
     Main = Window:AddTab({ Title = "Auto Farm", Icon = "rbxassetid://4483345998" }),
@@ -36,13 +52,5 @@ Tabs.Main:AddToggle("AutoSell", {Title = "Auto Sell", Default = false}):OnChange
         end
     end)
 end)
-
-Tabs.Main:AddButton({
-    Title = "Unlock All Islands",
-    Description = "Bütün adaları açmanı sağlar",
-    Callback = function()
-        print("Adalar açılıyor...")
-    end
-})
 
 Window:SelectTab(1)
