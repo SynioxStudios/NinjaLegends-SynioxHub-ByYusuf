@@ -1,56 +1,70 @@
 local Fluent = loadstring(game:HttpGet("https://github.com/dawid-scripts/Fluent/releases/latest/download/main.lua"))()
+local SaveManager = loadstring(game:HttpGet("https://raw.githubusercontent.com/dawid-scripts/Fluent/master/Addons/SaveManager.lua"))()
+local InterfaceManager = loadstring(game:HttpGet("https://raw.githubusercontent.com/dawid-scripts/Fluent/master/Addons/InterfaceManager.lua"))()
 
 local Window = Fluent:CreateWindow({
     Title = "Syniox Hub",
     SubTitle = "Ninja Legends",
     TabWidth = 160,
-    Size = UDim2.fromOffset(450, 300),
-    Acrylic = false, 
+    Size = UDim2.fromOffset(480, 360),
+    Acrylic = false,
     Theme = "Dark",
-    MinimizeKey = Enum.KeyCode.RightControl
+    MinimizeKey = Enum.KeyCode.LeftControl
 })
 
-local ToggleButton = Instance.new("TextButton")
-local ScreenGui = Instance.new("ScreenGui")
-ScreenGui.Parent = game:GetService("CoreGui")
-ToggleButton.Parent = ScreenGui
-ToggleButton.Size = UDim2.new(0, 50, 0, 50)
-ToggleButton.Position = UDim2.new(0.1, 0, 0.1, 0)
-ToggleButton.Text = "Aç"
-ToggleButton.BackgroundColor3 = Color3.fromRGB(41, 74, 122)
-ToggleButton.TextColor3 = Color3.fromRGB(255, 255, 255)
-Instance.new("UICorner", ToggleButton).CornerRadius = UDim.new(0, 8)
-ToggleButton.Draggable = true
-
-ToggleButton.MouseButton1Click:Connect(function()
-    game:GetService("VirtualInputManager"):SendKeyEvent(true, Enum.KeyCode.RightControl, false, game)
-end)
-
 local Tabs = {
-    Main = Window:AddTab({ Title = "Auto Farm", Icon = "rbxassetid://4483345998" }),
+    Main = Window:AddTab({ Title = "Main", Icon = "rbxassetid://4483345998" }),
     Settings = Window:AddTab({ Title = "Settings", Icon = "settings" })
 }
 
-Tabs.Main:AddToggle("AutoSwing", {Title = "Auto Swing", Default = false}):OnChanged(function(Value)
-    _G.swing = Value
+local Options = Fluent.Options
+
+Tabs.Main:AddToggle("AutoSwing", {Title = "Auto Swing", Default = false}):OnChanged(function()
+    _G.swing = Options.AutoSwing.Value
     task.spawn(function()
         while _G.swing do
-            if not _G.swing then break end
             game:GetService("Players").LocalPlayer.ninjaEvent:FireServer("swingKatana")
             task.wait()
         end
     end)
 end)
 
-Tabs.Main:AddToggle("AutoSell", {Title = "Auto Sell", Default = false}):OnChanged(function(Value)
-    _G.sell = Value
+Tabs.Main:AddToggle("AutoSell", {Title = "Auto Sell", Default = false}):OnChanged(function()
+    _G.sell = Options.AutoSell.Value
     task.spawn(function()
         while _G.sell do
-            if not _G.sell then break end
             game:GetService("ReplicatedStorage").rEvents.sellEvent:FireServer()
-            task.wait(0.1)
+            task.wait(0.2)
         end
     end)
 end)
+
+local ScreenGui = Instance.new("ScreenGui")
+ScreenGui.Name = "SynioxMobile"
+ScreenGui.Parent = game:GetService("CoreGui")
+ScreenGui.ResetOnSpawn = false
+
+local ToggleBtn = Instance.new("ImageButton")
+ToggleBtn.Name = "Launcher"
+ToggleBtn.Parent = ScreenGui
+ToggleBtn.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+ToggleBtn.BackgroundTransparency = 0.5
+ToggleBtn.Position = UDim2.new(0, 10, 0.5, -25)
+ToggleBtn.Size = UDim2.new(0, 50, 0, 50)
+ToggleBtn.Image = "rbxassetid://117239677500065"
+ToggleBtn.Draggable = true
+
+local Corner = Instance.new("UICorner")
+Corner.CornerRadius = UDim.new(0.5, 0)
+Corner.Parent = ToggleBtn
+
+ToggleBtn.MouseButton1Click:Connect(function()
+    game:GetService("VirtualInputManager"):SendKeyEvent(true, Enum.KeyCode.LeftControl, false, game)
+end)
+
+SaveManager:SetLibrary(Fluent)
+InterfaceManager:SetLibrary(Fluent)
+InterfaceManager:BuildInterfaceSection(Tabs.Settings)
+SaveManager:BuildConfigSection(Tabs.Settings)
 
 Window:SelectTab(1)
