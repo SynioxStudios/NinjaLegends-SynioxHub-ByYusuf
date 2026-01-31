@@ -1,26 +1,20 @@
-local Fluent = loadstring(game:HttpGet("https://github.com/dawid-scripts/Fluent/releases/latest/download/main.lua"))()
-local SaveManager = loadstring(game:HttpGet("https://raw.githubusercontent.com/dawid-scripts/Fluent/master/Addons/SaveManager.lua"))()
-local InterfaceManager = loadstring(game:HttpGet("https://raw.githubusercontent.com/dawid-scripts/Fluent/master/Addons/InterfaceManager.lua"))()
+local Library = loadstring(game:HttpGet("https://raw.githubusercontent.com/SynioxStudios/ByYusufGui-Syniox/refs/heads/main/SynioxGui.txt"))()
 
-local Window = Fluent:CreateWindow({
-    Title = "Syniox Hub",
-    SubTitle = "Ninja Legends",
-    TabWidth = 160,
-    Size = UDim2.fromOffset(480, 360),
-    Acrylic = false,
-    Theme = "Dark",
-    MinimizeKey = Enum.KeyCode.LeftControl
+local Window = Library:AddWindow("Syniox Hub | Ninja Legends", {
+    main_color = Color3.fromRGB(41, 74, 122),
+    min_size = Vector2.new(450, 400),
+    toggle_key = Enum.KeyCode.RightControl,
+    can_resize = true
 })
 
-local Tabs = {
-    Main = Window:AddTab({ Title = "Main", Icon = "rbxassetid://4483345998" }),
-    Settings = Window:AddTab({ Title = "Settings", Icon = "settings" })
-}
+local MainTab = Window:AddTab("Auto Farm")
+local TeleportTab = Window:AddTab("Islands")
+local MeditateTab = Window:AddTab("Meditate")
+local BuyTab = Window:AddTab("Auto Buy")
+local MiscTab = Window:AddTab("Misc")
 
-local Options = Fluent.Options
-
-Tabs.Main:AddToggle("AutoSwing", {Title = "Auto Swing", Default = false}):OnChanged(function()
-    _G.swing = Options.AutoSwing.Value
+MainTab:AddToggle("Auto Swing", function(state)
+    _G.swing = state
     task.spawn(function()
         while _G.swing do
             game:GetService("Players").LocalPlayer.ninjaEvent:FireServer("swingKatana")
@@ -29,42 +23,97 @@ Tabs.Main:AddToggle("AutoSwing", {Title = "Auto Swing", Default = false}):OnChan
     end)
 end)
 
-Tabs.Main:AddToggle("AutoSell", {Title = "Auto Sell", Default = false}):OnChanged(function()
-    _G.sell = Options.AutoSell.Value
+MainTab:AddToggle("Auto Sell", function(state)
+    _G.sell = state
     task.spawn(function()
         while _G.sell do
-            game:GetService("ReplicatedStorage").rEvents.sellEvent:FireServer()
-            task.wait(0.2)
+            if game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart") then
+                game.workspace.sellAreaCircles.sellAreaCircle15.circleInner.CFrame = game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame
+                task.wait(0.1)
+                game.workspace.sellAreaCircles.sellAreaCircle15.circleInner.CFrame = game.Workspace.Part.CFrame
+            end
+            task.wait(0.1)
         end
     end)
 end)
 
-local ScreenGui = Instance.new("ScreenGui")
-ScreenGui.Name = "SynioxMobile"
-ScreenGui.Parent = game:GetService("CoreGui")
-ScreenGui.ResetOnSpawn = false
-
-local ToggleBtn = Instance.new("ImageButton")
-ToggleBtn.Name = "Launcher"
-ToggleBtn.Parent = ScreenGui
-ToggleBtn.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
-ToggleBtn.BackgroundTransparency = 0.5
-ToggleBtn.Position = UDim2.new(0, 10, 0.5, -25)
-ToggleBtn.Size = UDim2.new(0, 50, 0, 50)
-ToggleBtn.Image = "rbxassetid://117239677500065"
-ToggleBtn.Draggable = true
-
-local Corner = Instance.new("UICorner")
-Corner.CornerRadius = UDim.new(0.5, 0)
-Corner.Parent = ToggleBtn
-
-ToggleBtn.MouseButton1Click:Connect(function()
-    game:GetService("VirtualInputManager"):SendKeyEvent(true, Enum.KeyCode.LeftControl, false, game)
+MainTab:AddToggle("Auto Collect Chi", function(state)
+    _G.chi = state
+    task.spawn(function()
+        while _G.chi do
+            for _,v in pairs(game.Workspace.chiItems:GetChildren()) do
+                if v:IsA("Part") or v:IsA("MeshPart") then
+                    v.CFrame = game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame
+                end
+            end
+            task.wait(0.5)
+        end
+    end)
 end)
 
-SaveManager:SetLibrary(Fluent)
-InterfaceManager:SetLibrary(Fluent)
-InterfaceManager:BuildInterfaceSection(Tabs.Settings)
-SaveManager:BuildConfigSection(Tabs.Settings)
+TeleportTab:AddButton("Unlock All Islands", function()
+    local islands = {
+        CFrame.new(80, 766, -188), CFrame.new(-128, 39439, 173), CFrame.new(183, 46010, 36),
+        CFrame.new(188, 59594, 24), CFrame.new(166, 52607, 34), CFrame.new(180, 33206, 28),
+        CFrame.new(172, 80498, 26), CFrame.new(175, 92955, 30), CFrame.new(168, 115200, 25)
+    }
+    for _, cf in ipairs(islands) do
+        game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = cf
+        task.wait(0.3)
+    end
+end)
 
-Window:SelectTab(1)
+MeditateTab:AddButton("Mystical Waters", function()
+    game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(320, 30383, -12)
+end)
+
+MeditateTab:AddButton("Midnight Waters", function()
+    game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(315, 30383, -20)
+end)
+
+BuyTab:AddToggle("Auto Buy Swords", function(state)
+    _G.swords = state
+    task.spawn(function()
+        while _G.swords do
+            game:GetService("Players").LocalPlayer.ninjaEvent:FireServer("buyAllSwords", "Blazing Vortex Island")
+            task.wait(0.5)
+        end
+    end)
+end)
+
+BuyTab:AddToggle("Auto Buy Belts", function(state)
+    _G.belts = state
+    task.spawn(function()
+        while _G.belts do
+            game:GetService("Players").LocalPlayer.ninjaEvent:FireServer("buyAllBelts", "Blazing Vortex Island")
+            task.wait(0.5)
+        end
+    end)
+end)
+
+BuyTab:AddToggle("Auto Buy Skills", function(state)
+    _G.skills = state
+    task.spawn(function()
+        while _G.skills do
+            game:GetService("Players").LocalPlayer.ninjaEvent:FireServer("buyAllSkills", "Blazing Vortex Island")
+            task.wait(0.5)
+        end
+    end)
+end)
+
+MiscTab:AddToggle("Auto Rebirth", function(state)
+    _G.rebirth = state
+    task.spawn(function()
+        while _G.rebirth do
+            game:GetService("Players").LocalPlayer.ninjaEvent:FireServer("checkRebirth")
+            task.wait(1)
+        end
+    end)
+end)
+
+MiscTab:AddButton("No Fog & Lag Fix", function()
+    game:GetService("Lighting").FogEnd = 999999
+    for _, v in pairs(game:GetDescendants()) do
+        if v:IsA("ParticleEmitter") or v:IsA("Trail") then v.Enabled = false end
+    end
+end)
