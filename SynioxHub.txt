@@ -2,29 +2,47 @@ local Fluent = loadstring(game:HttpGet("https://github.com/dawid-scripts/Fluent/
 
 local Window = Fluent:CreateWindow({
     Title = "Syniox Hub",
-    SubTitle = "Ninja Legends"
+    SubTitle = "Ninja Legends",
+    TabWidth = 160,
+    Size = UDim2.fromOffset(580, 460),
+    Acrylic = true, 
+    Theme = "Dark",
+    MinimizeKey = Enum.KeyCode.RightControl
 })
 
-local FarmTab = Window:AddTab({ Title = "Auto Farm" })
-local ShopTab = Window:AddTab({ Title = "Shop" })
+local Tabs = {
+    Main = Window:AddTab({ Title = "Auto Farm", Icon = "rbxassetid://4483345998" }),
+    Settings = Window:AddTab({ Title = "Settings", Icon = "settings" })
+}
 
-FarmTab:AddToggle("Auto Swing", function(state)
-    _G.swing = state
-    while _G.swing do
-        task.wait()
-        game:GetService("Players").LocalPlayer.ninjaEvent:FireServer("swingKatana")
+Tabs.Main:AddToggle("AutoSwing", {Title = "Auto Swing", Default = false}):OnChanged(function(Value)
+    _G.swing = Value
+    task.spawn(function()
+        while _G.swing do
+            if not _G.swing then break end
+            game:GetService("Players").LocalPlayer.ninjaEvent:FireServer("swingKatana")
+            task.wait()
+        end
+    end)
+end)
+
+Tabs.Main:AddToggle("AutoSell", {Title = "Auto Sell", Default = false}):OnChanged(function(Value)
+    _G.sell = Value
+    task.spawn(function()
+        while _G.sell do
+            if not _G.sell then break end
+            game:GetService("ReplicatedStorage").rEvents.sellEvent:FireServer()
+            task.wait(0.1)
+        end
+    end)
+end)
+
+Tabs.Main:AddButton({
+    Title = "Unlock All Islands",
+    Description = "Bütün adaları açmanı sağlar",
+    Callback = function()
+        print("Adalar açılıyor...")
     end
-end)
+})
 
-FarmTab:AddToggle("Auto Sell", function(state)
-    _G.sell = state
-    while _G.sell do
-        task.wait()
-        -- Buraya sell kodunu ekle
-    end
-end)
-
-ShopTab:AddButton("Unlock All Islands", function()
-    print("Islands Unlocked!")
-    -- Buraya ada açma kodunu ekle
-end)
+Window:SelectTab(1)
