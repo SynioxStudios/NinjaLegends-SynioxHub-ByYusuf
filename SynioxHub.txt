@@ -1,19 +1,26 @@
-local Library = loadstring(game:HttpGet("https://raw.githubusercontent.com/SynioxStudios/ByYusufGui-Syniox/refs/heads/main/SynioxGui.txt"))()
+local library = loadstring(game:HttpGet("https://raw.githubusercontent.com/SynioxStudios/ByYusufGui-Syniox/refs/heads/main/SynioxGui.txt", true))()
+local displayName = game.Players.LocalPlayer.DisplayName
 
-local Window = Library:AddWindow("Syniox Hub | Ninja Legends", {
-    main_color = Color3.fromRGB(41, 74, 122),
-    min_size = Vector2.new(450, 400),
-    toggle_key = Enum.KeyCode.RightControl,
-    can_resize = true
+local window = library:AddWindow("Syniox Public | Muscle Legends || HELLO - ".. displayName, {
+    title_bar = {
+        Color3.fromRGB(160, 0, 0), 
+        Color3.fromRGB(40, 0, 0),  
+        Color3.fromRGB(0, 0, 0)    
+    }, 
+    title_bar_transparency = 0.1, 
+    background = {
+        Color3.fromRGB(0, 0, 0), 
+        Color3.fromRGB(10, 10, 10), 
+        Color3.fromRGB(20, 20, 20)
+    }, 
+    background_transparency = 0.1, 
+    main_color = Color3.fromRGB(160, 0, 0), 
+    min_size = Vector2.new(450, 450), 
+    can_resize = true 
 })
 
-local MainTab = Window:AddTab("Auto Farm")
-local TeleportTab = Window:AddTab("Islands")
-local MeditateTab = Window:AddTab("Meditate")
-local BuyTab = Window:AddTab("Auto Buy")
-local MiscTab = Window:AddTab("Misc")
-
-MainTab:AddToggle("Auto Swing", function(state)
+local FarmTab = Window:AddTab("Farm")
+FarmTab:AddToggle("Auto Swing", function(state)
     _G.swing = state
     task.spawn(function()
         while _G.swing do
@@ -23,7 +30,7 @@ MainTab:AddToggle("Auto Swing", function(state)
     end)
 end)
 
-MainTab:AddToggle("Auto Sell", function(state)
+FarmTab:AddToggle("Auto Sell", function(state)
     _G.sell = state
     task.spawn(function()
         while _G.sell do
@@ -37,7 +44,7 @@ MainTab:AddToggle("Auto Sell", function(state)
     end)
 end)
 
-MainTab:AddToggle("Auto Collect Chi", function(state)
+FarmTab:AddToggle("Auto Collect Chi", function(state)
     _G.chi = state
     task.spawn(function()
         while _G.chi do
@@ -51,7 +58,34 @@ MainTab:AddToggle("Auto Collect Chi", function(state)
     end)
 end)
 
-TeleportTab:AddButton("Unlock All Islands", function()
+local CombatTab = Window:AddTab("Combat")
+CombatTab:AddToggle("Auto Boss (Robot)", function(state)
+    _G.boss = state
+    task.spawn(function()
+        while _G.boss do
+            if game.Workspace:FindFirstChild("RobotBoss") then
+                game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = game.Workspace.RobotBoss.HumanoidRootPart.CFrame * CFrame.new(0,0,5)
+                game:GetService("Players").LocalPlayer.ninjaEvent:FireServer("swingKatana")
+            end
+            task.wait()
+        end
+    end)
+end)
+CombatTab:AddToggle("Auto Eternal Boss", function(state)
+    _G.eternal = state
+    task.spawn(function()
+        while _G.eternal do
+            if game.Workspace:FindFirstChild("EternalBoss") then
+                game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = game.Workspace.EternalBoss.HumanoidRootPart.CFrame * CFrame.new(0,0,5)
+                game:GetService("Players").LocalPlayer.ninjaEvent:FireServer("swingKatana")
+            end
+            task.wait()
+        end
+    end)
+end)
+
+local IslandTab = Window:AddTab("Islands")
+IslandTab:AddButton("Unlock All Islands", function()
     local islands = {
         CFrame.new(80, 766, -188), CFrame.new(-128, 39439, 173), CFrame.new(183, 46010, 36),
         CFrame.new(188, 59594, 24), CFrame.new(166, 52607, 34), CFrame.new(180, 33206, 28),
@@ -59,60 +93,58 @@ TeleportTab:AddButton("Unlock All Islands", function()
     }
     for _, cf in ipairs(islands) do
         game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = cf
-        task.wait(0.3)
+        task.wait(0.5)
     end
 end)
 
+local MeditateTab = Window:AddTab("Meditate")
 MeditateTab:AddButton("Mystical Waters", function()
     game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(320, 30383, -12)
 end)
-
 MeditateTab:AddButton("Midnight Waters", function()
     game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(315, 30383, -20)
 end)
 
-BuyTab:AddToggle("Auto Buy Swords", function(state)
+local ShopTab = Window:AddTab("Auto Buy")
+ShopTab:AddToggle("Auto Buy Swords", function(state)
     _G.swords = state
     task.spawn(function()
         while _G.swords do
             game:GetService("Players").LocalPlayer.ninjaEvent:FireServer("buyAllSwords", "Blazing Vortex Island")
-            task.wait(0.5)
+            task.wait(0.7)
         end
     end)
 end)
-
-BuyTab:AddToggle("Auto Buy Belts", function(state)
+ShopTab:AddToggle("Auto Buy Belts", function(state)
     _G.belts = state
     task.spawn(function()
         while _G.belts do
             game:GetService("Players").LocalPlayer.ninjaEvent:FireServer("buyAllBelts", "Blazing Vortex Island")
-            task.wait(0.5)
+            task.wait(0.7)
         end
     end)
 end)
-
-BuyTab:AddToggle("Auto Buy Skills", function(state)
+ShopTab:AddToggle("Auto Buy Skills", function(state)
     _G.skills = state
     task.spawn(function()
         while _G.skills do
             game:GetService("Players").LocalPlayer.ninjaEvent:FireServer("buyAllSkills", "Blazing Vortex Island")
-            task.wait(0.5)
+            task.wait(0.7)
         end
     end)
 end)
 
+local MiscTab = Window:AddTab("Misc")
 MiscTab:AddToggle("Auto Rebirth", function(state)
-    _G.rebirth = state
+    _G.reb = state
     task.spawn(function()
-        while _G.rebirth do
+        while _G.reb do
             game:GetService("Players").LocalPlayer.ninjaEvent:FireServer("checkRebirth")
-            task.wait(1)
+            task.wait(2)
         end
     end)
 end)
-
-MiscTab:AddButton("No Fog & Lag Fix", function()
-    game:GetService("Lighting").FogEnd = 999999
+MiscTab:AddButton("Anti-Lag", function()
     for _, v in pairs(game:GetDescendants()) do
         if v:IsA("ParticleEmitter") or v:IsA("Trail") then v.Enabled = false end
     end
